@@ -38,3 +38,8 @@ git push
 cd dir
 touch 12345.sh
 cd ..
+git add .
+git status
+git commit -m 'Hello VN'
+git push
+rm readme.md
