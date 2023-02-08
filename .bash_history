@@ -24,3 +24,10 @@ git push
 git add .
 git status
 touch max.sh
+git add .
+git status
+git commit -m 'Hello VN'
+git push
+echo "heelo VN" > max.sh
+git add .
+git push
