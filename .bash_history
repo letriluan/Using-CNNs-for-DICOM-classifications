@@ -17,3 +17,10 @@ git push -u origin master
 touch filee
 mkdir dir
 git add /
+git add .
+git status
+git commit -m 'Hello VN'
+git push
+git add .
+git status
+touch max.sh
