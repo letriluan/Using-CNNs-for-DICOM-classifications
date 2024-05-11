@@ -4,8 +4,9 @@ from transformers import DistilBertTokenizer, DistilBertForQuestionAnswering
 from transformers import BertTokenizer, BertForQuestionAnswering
 import pandas as pd
 # Load DistilBERT model and tokenizer
-tokenizer = DistilBertTokenizer.from_pretrained('distilbert-base-uncased',force_download=True)
-model = DistilBertForQuestionAnswering.from_pretrained('distilbert-base-uncased',force_download=True)
+# Load BERT Base model and tokenizer
+tokenizer = BertTokenizer.from_pretrained('bert-base-uncased')
+model = BertForQuestionAnswering.from_pretrained('bert-base-uncased')
 df = pd.read_csv('cleaned_data.csv')
 
 def answer_question_bert(question, context):
