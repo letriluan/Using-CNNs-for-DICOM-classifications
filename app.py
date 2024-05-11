@@ -1,101 +1,46 @@
-import pandas as pd
-import spacy
-from nltk.tokenize import word_tokenize
-from nltk.corpus import stopwords
-import nltk
-nltk.download('punkt')
-nltk.download('stopwords')
-import string
-import numpy as np
-import re
-import streamlit as st
+from transformers import BertTokenizer, BertForQuestionAnswering
+import torch
 
-df = pd.read_csv('cleaned_data.csv', encoding="latin1")
+# Load BERT model and tokenizer
+tokenizer = BertTokenizer.from_pretrained('bert-large-uncased-whole-word-masking-finetuned-squad')
+model = BertForQuestionAnswering.from_pretrained('bert-large-uncased-whole-word-masking-finetuned-squad')
 
-from sentence_transformers import SentenceTransformer
+def answer_question_bert(question, context):
+    """Function to answer questions using BERT directly from the context."""
+    inputs = tokenizer(question, context, add_special_tokens=True, return_tensors="pt")
+    input_ids = inputs["input_ids"].tolist()[0]
 
-model = SentenceTransformer('all-MiniLM-L6-v2')
+    outputs = model(**inputs, return_dict=True)
+    answer_start_scores = outputs.start_logits
+    answer_end_scores = outputs.end_logits
 
-def find_most_relevant_sentence(question, article_text):
-    doc = nlp(article_text)
-    sentences = [sent.text for sent in doc.sents]
-    question_embedding = model.encode(question)
-    sentence_embeddings = model.encode(sentences)
+    answer_start = torch.argmax(answer_start_scores)
+    answer_end = torch.argmax(answer_end_scores) + 1
 
-    similarities = util.pytorch_cos_sim(question_embedding, sentence_embeddings).squeeze()
-    most_similar_index = similarities.argmax().item()
-    confidence = similarities[most_similar_index].item()
+    # Convert the tokens back to the original words
+    answer = tokenizer.convert_tokens_to_string(tokenizer.convert_ids_to_tokens(input_ids[answer_start:answer_end]))
 
-    return sentences[most_similar_index], confidence
-
-nlp = spacy.load("en_core_web_sm")
-def extract_relevant_snippets(question, relevant_sentence):
-    doc = nlp(relevant_sentence)
-    question_doc = nlp(question)
-
-    target_label = 'PERSON'  # Default to PERSON
-
-    if any(word in question.lower() for word in ['who', 'name']):
-        target_label = 'PERSON'
-    elif any(word in question.lower() for word in ['when', 'date', 'year', 'time']):
-        target_label = 'DATE'
-    elif any(word in question.lower() for word in ['where', 'city', 'country', 'place', 'location']):
-        target_label = 'GPE'
-    elif any(word in question.lower() for word in ['what', 'company', 'organization']):
-        target_label = 'ORG'
-    elif 'how many' in question.lower():
-        target_label = 'CARDINAL'
-
-    entities = {}
-    for ent in doc.ents:
-        if ent.label_ == target_label:
-            if ent.text in entities:
-                entities[ent.text] += 1
-            else:
-                entities[ent.text] = 1
-
-    if entities:
-        sorted_entities = sorted(entities.items(), key=lambda item: (-item[1], relevant_sentence.index(item[0])))
-        return sorted_entities[0][0]
-
-    return "No relevant information found."
-
-def answer_question_from_article(article_id, question, df):
-    try:
-        article_text = df.loc[df['id'] == article_id, 'article'].values[0]
-    except IndexError:
-        return "Article not found."
-
-    relevant_sentence, confidence = find_most_relevant_sentence(question, article_text)
-
-    confidence_threshold = 0.5
-    if confidence < confidence_threshold:
-        return "High confidence answer not found."
-
-    answer_snippet = extract_relevant_snippets(question, relevant_sentence)
-    return answer_snippet, confidence
-
+    return answer
 
 def main():
-    st.title("Your App Title")
+    st.title("BERT Question Answering App")
 
-    # Your interactive elements and outputs here
-    # For example:
-    article_id = st.text_input("Enter the article ID or type 'quit' to exit:")
+    # Input fields for question and article ID
     question = st.text_input("Enter your question:")
+    article_id = st.number_input("Enter the article ID:", value=0, step=1)
 
     if st.button("Get Answer"):
-        if article_id.lower() == 'quit' or question.lower() == 'quit':
-            st.stop()
+        # Retrieve article text from a dataframe or database
+        article_text = ""  # Replace with your code to retrieve the article text
+        if not article_text:
+            st.error("Article not found.")
+            return
 
-        # Call your function to get the answer
-        answer = answer_question_from_article(int(article_id), question, df_new)
+        # Get answer using BERT model
+        answer = answer_question_bert(question, article_text)
+
+        # Display the answer
         st.write("Answer:", answer)
 
 if __name__ == "__main__":
     main()
-
-
-
-
-
