@@ -1,6 +1,6 @@
 from transformers import BertTokenizer, BertForQuestionAnswering
 import torch
-
+import streamlit as st
 # Load BERT model and tokenizer
 tokenizer = BertTokenizer.from_pretrained('bert-large-uncased-whole-word-masking-finetuned-squad')
 model = BertForQuestionAnswering.from_pretrained('bert-large-uncased-whole-word-masking-finetuned-squad')
