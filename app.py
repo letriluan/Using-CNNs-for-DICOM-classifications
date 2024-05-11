@@ -3,7 +3,16 @@ import spacy
 from nltk.tokenize import word_tokenize
 from nltk.corpus import stopwords
 import nltk
+import pandas as pd
+import spacy
+from nltk.tokenize import word_tokenize
+from nltk.corpus import stopwords
+import nltk
+nltk.download('punkt')
+nltk.download('stopwords')
+import numpy as np
 
+nlp = spacy.load('en_core_web_sm')
 
 df = pd.read_csv('cleaned_data.csv', encoding="latin1")
 
