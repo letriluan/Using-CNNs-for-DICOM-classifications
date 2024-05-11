@@ -2,6 +2,8 @@ import torch
 import streamlit as st
 from transformers import BertTokenizer, BertForQuestionAnswering
 import pandas as pd
+import torch.nn.functional as F
+
 
 tokenizer = BertTokenizer.from_pretrained('bert-base-uncased',force_download=True)
 model = BertForQuestionAnswering.from_pretrained('bert-base-uncased',force_download=True)
