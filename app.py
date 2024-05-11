@@ -1,12 +1,11 @@
 import torch
 import streamlit as st
-from transformers import DistilBertTokenizer, DistilBertForQuestionAnswering
 from transformers import BertTokenizer, BertForQuestionAnswering
 import pandas as pd
-# Load DistilBERT model and tokenizer
-# Load BERT Base model and tokenizer
-tokenizer = BertTokenizer.from_pretrained('bert-base-uncased')
-model = BertForQuestionAnswering.from_pretrained('bert-base-uncased')
+
+tokenizer = BertTokenizer.from_pretrained('bert-base-uncased',force_download=True)
+model = BertForQuestionAnswering.from_pretrained('bert-base-uncased',force_download=True)
+
 df = pd.read_csv('cleaned_data.csv')
 
 def answer_question_bert(question, context):
