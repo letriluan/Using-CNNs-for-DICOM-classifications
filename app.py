@@ -24,6 +24,25 @@ def answer_question_bert(question, context):
     answer = tokenizer.convert_tokens_to_string(tokenizer.convert_ids_to_tokens(input_ids[answer_start:answer_end]))
 
     return answer
+
+
+def answer_question_bert(question, context):
+    """Function to answer questions using BERT directly from the context, including confidence score."""
+    inputs = tokenizer(question, context, add_special_tokens=True, return_tensors="pt")
+    input_ids = inputs["input_ids"].tolist()[0]
+
+    with torch.no_grad(): 
+        outputs = model(**inputs)
+        answer_start_scores = outputs.start_logits
+        answer_end_scores = outputs.end_logits
+
+    start_probs = F.softmax(answer_start_scores, dim=-1)
+    end_probs = F.softmax(answer_end_scores, dim=-1)
+    answer_start = torch.argmax(start_probs)
+    answer_end = torch.argmax(end_probs) + 1
+    answer = tokenizer.convert_tokens_to_string(tokenizer.convert_ids_to_tokens(input_ids[answer_start:answer_end]))
+    return answer
+    
 def answer_question_from_article(article_id, question, df):
     """Retrieve an article by ID and use BERT to answer a question based on the article's text, including confidence."""
     try:
