@@ -1,38 +1,38 @@
-import streamlit as st
 import pandas as pd
 import spacy
-from sentence_transformers import SentenceTransformer, util
-import neuralcoref
-import nltk
-from nltk.tokenize import RegexpTokenizer
+from nltk.tokenize import word_tokenize
 from nltk.corpus import stopwords
-
+import nltk
+nltk.download('punkt')
+nltk.download('stopwords')
+import string
+import numpy as np
+import re
+import streamlit as st
 
 df = pd.read_csv('/Users/letriluan/Downloads/NLP/cleaned_data.csv', encoding="latin1")
+df
+
+df.info()
+
+df.describe()
+
+df.isnull().sum()
+
+"""**Pre-process**
+
+!python -m spacy download en
+"""
+
+from nltk.tokenize import RegexpTokenizer
+from nltk.corpus import stopwords
+import spacy
+import neuralcoref
 
 nlp = spacy.load('en_core_web_sm')
-neuralcoref.add_to_pipe(nlp)
-
-def clean_text1(text):
-    tokenizer = RegexpTokenizer(r'\b\w+\b')
-    tokens = tokenizer.tokenize(text)
-    stop_words = set(stopwords.words("english"))
-    filtered_tokens = [token for token in tokens if token.lower() not in stop_words]
-    doc = nlp(" ".join(filtered_tokens))
-    lemmatized_tokens = [token.lemma_ if token.lemma_ != '-PRON-' else token.text for token in doc]
-
-    return " ".join(lemmatized_tokens)
 
 df_new = df.copy()
-df_new["article"] = df_new["article"].apply(clean_text1)
 
-"""**Coreference Resolution utility**"""
-
-def resolve_coreferences(text):
-    doc = nlp(text)
-    if doc._.has_coref:
-        return doc._.coref_resolved
-    return text
 
 """**Text matching utility**"""
 
@@ -99,7 +99,13 @@ def answer_question_from_article(article_id, question, df):
     answer_snippet = extract_relevant_snippets(question, relevant_sentence)
     return answer_snippet, confidence
 
-"""**Test utility**"""
+article_id = 17574
+question = "Who is the vice chairman of Samsung?"
+answer = answer_question_from_article(article_id, question, df_new)
+print("Answer snippet:", answer)
+
+
+"""**Interaction**"""
 
 def user_interaction():
     while True:
@@ -119,15 +125,28 @@ def user_interaction():
         except ValueError:
             print("Invalid article ID. Please enter a numeric ID.")
 
-def main():
-    st.title("Question Answering System")
+# Your functions and imports here
 
-    article_id = st.text_input("Enter the article ID:")
+def main():
+    st.title("Your App Title")
+
+    # Your interactive elements and outputs here
+    # For example:
+    article_id = st.text_input("Enter the article ID or type 'quit' to exit:")
     question = st.text_input("Enter your question:")
 
-    if st.button("Ask"):
-        answer = answer_question_from_article(int(article_id), question, df)
+    if st.button("Get Answer"):
+        if article_id.lower() == 'quit' or question.lower() == 'quit':
+            st.stop()
+
+        # Call your function to get the answer
+        answer = answer_question_from_article(int(article_id), question, df_new)
         st.write("Answer:", answer)
 
 if __name__ == "__main__":
     main()
+
+
+
+
+
