@@ -10,31 +10,7 @@ import numpy as np
 import re
 import streamlit as st
 
-df = pd.read_csv('/Users/letriluan/Downloads/NLP/cleaned_data.csv', encoding="latin1")
-df
-
-df.info()
-
-df.describe()
-
-df.isnull().sum()
-
-"""**Pre-process**
-
-!python -m spacy download en
-"""
-
-from nltk.tokenize import RegexpTokenizer
-from nltk.corpus import stopwords
-import spacy
-import neuralcoref
-
-nlp = spacy.load('en_core_web_sm')
-
-df_new = df.copy()
-
-
-"""**Text matching utility**"""
+df = pd.read_csv('cleaned_data.csv', encoding="latin1")
 
 from sentence_transformers import SentenceTransformer, util
 
@@ -99,33 +75,6 @@ def answer_question_from_article(article_id, question, df):
     answer_snippet = extract_relevant_snippets(question, relevant_sentence)
     return answer_snippet, confidence
 
-article_id = 17574
-question = "Who is the vice chairman of Samsung?"
-answer = answer_question_from_article(article_id, question, df_new)
-print("Answer snippet:", answer)
-
-
-"""**Interaction**"""
-
-def user_interaction():
-    while True:
-        article_id = input("Enter the article ID or type 'quit' to exit: ")
-        if article_id.lower() == 'quit':
-            break
-        print( 'Article ID: ', article_id)
-        question = input("Enter your question: ")
-
-        if question.lower() == 'quit':
-            break
-        print('Your question: ', question)
-        try:
-            article_id = int(article_id)
-            answer = answer_question_from_article(article_id, question, df_new)
-            print("Answer:", answer)
-        except ValueError:
-            print("Invalid article ID. Please enter a numeric ID.")
-
-# Your functions and imports here
 
 def main():
     st.title("Your App Title")
