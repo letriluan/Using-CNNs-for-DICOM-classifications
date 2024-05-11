@@ -12,7 +12,7 @@ import streamlit as st
 
 df = pd.read_csv('cleaned_data.csv', encoding="latin1")
 
-from sentence_transformers import SentenceTransformer, util
+from sentence_transformers import SentenceTransformer
 
 model = SentenceTransformer('all-MiniLM-L6-v2')
 
