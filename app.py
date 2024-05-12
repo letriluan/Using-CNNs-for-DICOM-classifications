@@ -76,7 +76,7 @@ def answer_question_from_article(article_id, question, df):
 def main():
     st.title("Question Answering Systems")
     question = st.text_input("Enter your question:")
-    article_id = st.number_input("Enter the article ID:")
+    article_id = st.number_input("Enter the article ID:", value = 0, step = 1)
     if st.button("Get Answer"):
         answer = answer_question_from_article(article_id, question, df)
         st.write("Answer:", answer)
