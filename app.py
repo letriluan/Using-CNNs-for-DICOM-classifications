@@ -77,18 +77,11 @@ def answer_question_from_article(article_id, question, df):
 
 
 def main():
-    st.title("BERT Question Answering App")
-
-    # Input fields for question and article ID
+    st.title("Question Answering Systems")
     question = st.text_input("Enter your question:")
     article_id = st.number_input("Enter the article ID:", value=0, step=1)
-
     if st.button("Get Answer"):
-
-        # Get answer using BERT model
         answer = answer_question_from_article(article_id, question, df)
-
-        # Display the answer
         st.write("Answer:", answer)
 
 if __name__ == "__main__":
