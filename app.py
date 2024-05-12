@@ -10,8 +10,6 @@ nlp = spacy.load('en_core_web_sm')
 
 df = pd.read_csv('cleaned_data.csv', encoding="latin1")
 
-nlp = spacy.load('en_core_web_sm')
-
 from sentence_transformers import SentenceTransformer, util
 
 model = SentenceTransformer('all-MiniLM-L6-v2')
@@ -28,7 +26,6 @@ def find_most_relevant_sentence(question, article_text):
 
     return sentences[most_similar_index], confidence
 
-nlp = spacy.load("en_core_web_sm")
 def extract_relevant_snippets(question, relevant_sentence):
     doc = nlp(relevant_sentence)
     question_doc = nlp(question)
