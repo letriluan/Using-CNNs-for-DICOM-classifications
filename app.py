@@ -12,7 +12,7 @@ df = pd.read_csv('cleaned_data.csv', encoding="latin1")
 
 nlp = spacy.load('en_core_web_sm')
 
-from sentence_transformers import SentenceTransformer
+from sentence_transformers import SentenceTransformer, util
 
 model = SentenceTransformer('all-MiniLM-L6-v2')
 
