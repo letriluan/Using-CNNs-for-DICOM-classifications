@@ -86,7 +86,7 @@ def main():
     if st.button("Get Answer"):
 
         # Get answer using BERT model
-        answer = answer_question_from_article(article_id, question, df_new)
+        answer = answer_question_from_article(article_id, question, df)
 
         # Display the answer
         st.write("Answer:", answer)
