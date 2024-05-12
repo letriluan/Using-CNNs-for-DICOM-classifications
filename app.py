@@ -65,7 +65,7 @@ def answer_question_from_article(article_id, question, df):
 
     relevant_sentence, confidence = find_most_relevant_sentence(question, article_text)
 
-    confidence_threshold = 0.5
+    confidence_threshold = 0.3
     if confidence < confidence_threshold:
         return "High confidence answer not found."
 
