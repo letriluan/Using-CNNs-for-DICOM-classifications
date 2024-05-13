@@ -6,7 +6,7 @@ import nltk
 nltk.download('punkt')
 import numpy as np
 import streamlit as st
-nlp = spacy.load('en')
+nlp = spacy.load('en_core_web_sm')
 
 df = pd.read_csv('cleaned_data.csv', encoding="latin1")
 
