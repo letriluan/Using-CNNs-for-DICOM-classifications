@@ -1,0 +1,12 @@
+streamlit>=0.65.2
+pydicom>=2.0.0
+opencv-python-headless
+ffmpeg 
+#slibsm6 
+#libxext6
+#libgl1
+#libgl1-mesa-glx 
+tensorflow
+numpy
+sentencepiece
+requests
