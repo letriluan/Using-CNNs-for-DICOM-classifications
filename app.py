@@ -75,7 +75,7 @@ def main():
         # Config
         if image_bytes is not None:
             classes = ['COVID', 'NORMAL', 'PNEUMONIA']
-            model = keras.models.load_model('RESNET50_128_proposed.h5')
+            model = keras.models.load_model('RES_128_proposed.h5')
 
             def load_image(img):
                 im = Image.open(img)
